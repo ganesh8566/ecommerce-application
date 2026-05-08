@@ -32,8 +32,11 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 
 						// Public APIs
-						.requestMatchers("/api/users/register", "/api/users/login").permitAll()
+						.requestMatchers("/api/users/register", "/api/users/login",
 
+								// Swagger URLs
+								"/swagger-ui/**", "/v3/api-docs/**")
+						.permitAll()
 						// Secure Remaining APIs
 						.anyRequest().authenticated())
 
