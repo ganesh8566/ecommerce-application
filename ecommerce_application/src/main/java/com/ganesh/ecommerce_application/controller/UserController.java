@@ -6,12 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ganesh.ecommerce_application.dto.LoginResponseDTO;
+import com.ganesh.ecommerce_application.dto.JwtResponseDTO;
+import com.ganesh.ecommerce_application.dto.LoginRequestDTO;
 import com.ganesh.ecommerce_application.dto.UserResponseDTO;
 import com.ganesh.ecommerce_application.entity.User;
+import com.ganesh.ecommerce_application.jwt.JwtUtil;
 import com.ganesh.ecommerce_application.service.UserService;
 
 import jakarta.validation.Valid;
@@ -22,6 +23,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private JwtUtil jwtUtil;
 
 	// Register API
 	@PostMapping("/register")
@@ -34,9 +38,9 @@ public class UserController {
 
 	// Login API
 	@PostMapping("/login")
-	public ResponseEntity<?> loginUser(@RequestParam String email, @RequestParam String password) {
+	public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO loginDTO) {
 
-		User user = userService.loginUser(email, password);
+		User user = userService.loginUser(loginDTO.getEmail(), loginDTO.getPassword());
 
 		// Wrong Credentials
 		if (user == null) {
@@ -44,11 +48,9 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
 		}
 
-		// Convert Entity → DTO
-		UserResponseDTO userDTO = new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
+		// Generate JWT Token
+		String token = jwtUtil.generateToken(user.getEmail());
 
-		LoginResponseDTO response = new LoginResponseDTO("Login Successful", userDTO);
-
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(new JwtResponseDTO(token));
 	}
 }
