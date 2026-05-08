@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ganesh.ecommerce_application.entity.Product;
+import com.ganesh.ecommerce_application.exception.ResourceNotFoundException;
 import com.ganesh.ecommerce_application.repository.ProductRepository;
 
 @Service
@@ -32,7 +33,7 @@ public class ProductService {
 
 		Optional<Product> optionalProduct = productRepository.findById(id);
 
-		return optionalProduct.orElse(null);
+		return optionalProduct.orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
 	}
 
 	// Delete Product
