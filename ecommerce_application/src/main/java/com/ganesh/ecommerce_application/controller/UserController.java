@@ -49,7 +49,7 @@ public class UserController {
 		}
 
 		// Generate JWT Token
-		String token = jwtUtil.generateToken(user.getEmail());
+		String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
 		return ResponseEntity.ok(new JwtResponseDTO(token));
 	}

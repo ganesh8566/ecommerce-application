@@ -1,11 +1,11 @@
 package com.ganesh.ecommerce_application.jwt;
 
-
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -38,9 +38,13 @@ public class JwtFilter extends OncePerRequestFilter {
 				// Extract Email
 				String email = jwtUtil.extractEmail(token);
 
-				// Create Authentication Object
+				String role = jwtUtil.extractRole(token);
+
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, null,
-						Collections.emptyList());
+
+						List.of(new SimpleGrantedAuthority(role)));
+
+				SecurityContextHolder.getContext().setAuthentication(authToken);
 
 				// Set Authentication
 				SecurityContextHolder.getContext().setAuthentication(authToken);

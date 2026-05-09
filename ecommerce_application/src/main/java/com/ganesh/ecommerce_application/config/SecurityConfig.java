@@ -34,10 +34,13 @@ public class SecurityConfig {
 						// Public APIs
 						.requestMatchers("/api/users/register", "/api/users/login",
 
-								// Swagger URLs
 								"/swagger-ui/**", "/v3/api-docs/**")
 						.permitAll()
-						// Secure Remaining APIs
+
+						// ADMIN Only APIs
+						.requestMatchers("/api/products", "/api/products/*").hasRole("ADMIN")
+
+						// USER + ADMIN
 						.anyRequest().authenticated())
 
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,6 +1,5 @@
 package com.ganesh.ecommerce_application.jwt;
 
-
 import java.security.Key;
 import java.util.Date;
 
@@ -19,11 +18,11 @@ public class JwtUtil {
 	private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
 	// Generate Token
-	public String generateToken(String email) {
+	public String generateToken(String email, String role) {
 
 		Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-		return Jwts.builder().setSubject(email).setIssuedAt(new Date())
+		return Jwts.builder().setSubject(email).claim("role", role).setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 				.signWith(key, SignatureAlgorithm.HS256).compact();
 	}
@@ -51,5 +50,13 @@ public class JwtUtil {
 
 			return false;
 		}
+	}
+
+	public String extractRole(String token) {
+
+		Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role",
+				String.class);
 	}
 }

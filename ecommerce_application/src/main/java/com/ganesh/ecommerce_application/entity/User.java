@@ -28,6 +28,8 @@ public class User {
 	@Size(min = 6, message = "Password must be at least 6 characters")
 	private String password;
 
+	private String role;
+
 	// Default constructor (required by JPA)
 	public User() {
 	}
@@ -67,5 +69,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

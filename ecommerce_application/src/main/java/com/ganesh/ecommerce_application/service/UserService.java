@@ -23,6 +23,7 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
 
         user.setPassword(encryptedPassword);
+        user.setRole("ROLE_USER");
 
         return userRepository.save(user);
     }
