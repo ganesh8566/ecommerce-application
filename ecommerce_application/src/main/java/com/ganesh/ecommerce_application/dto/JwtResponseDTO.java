@@ -2,13 +2,21 @@ package com.ganesh.ecommerce_application.dto;
 
 public class JwtResponseDTO {
 
-	private String token;
+	private String accessToken;
 
-	public JwtResponseDTO(String token) {
-		this.token = token;
+	private String refreshToken;
+
+	public JwtResponseDTO(String accessToken, String refreshToken) {
+
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
 	}
 
-	public String getToken() {
-		return token;
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public String getRefreshToken() {
+		return refreshToken;
 	}
 }
